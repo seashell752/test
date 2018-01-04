@@ -5,7 +5,7 @@ import sys
 import time
 
 WIDTH = 1080
-HIGH = 1920
+HEIGHT = 1920
 
 TIMEOUT = 15
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -25,7 +25,7 @@ pid = int(restr[8])
 print version, max_contacts, max_x, max_y, max_pressure, pid
 
 def convert(x, y):
-      return(x * WIDTH / max_x, y * HIGH / max_y)
+      return(x * WIDTH / max_x, y * HEIGHT / max_y)
 
 def tap(s, x, y, l=0): #l为long preess time,单位毫秒
        cmd = 'd 0 {} {} 50 \n'.format(x,y)
