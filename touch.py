@@ -4,6 +4,8 @@ import socket
 import sys
 import time
 
+WIDTH = 1080
+HIGH = 1920
 
 TIMEOUT = 15
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -23,21 +25,24 @@ pid = int(restr[8])
 print version, max_contacts, max_x, max_y, max_pressure, pid
 
 def convert(x, y):
-    return(x*1080/max_x, y*1920/max_y)
+      return(x * WIDTH / max_x, y * HIGH / max_y)
+
+def tap(s, x, y, l=0): #l为long preess time,单位毫秒
+       cmd = 'd 0 {} {} 50 \n'.format(x,y)
+       print cmd
+       s.sendall(cmd)
+       s.sendall('c\n')
+       if l > 0:
+            time.sleep(float(l) / 1000.0)
+       s.sendall('u 0\n')
+       s.sendall('c\n')
+
 
 while True:
        x_str = raw_input("x:")
        y_str = raw_input("y:")
        x = int(x_str)
        y = int(y_str)
-       print x, y
        x, y = convert(x, y)
-       print x, y
-       cmd = 'd 0 {} {} 50 \n'.format(x,y)
-       print cmd
-       s.sendall(cmd)
-       s.sendall('c\n')
-       time.sleep(2)
-       s.sendall('u 0\n')
-       s.sendall('c\n')
+       tap(s, x, y, 200)
 s.close()
